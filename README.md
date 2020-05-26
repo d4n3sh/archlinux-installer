@@ -1,2 +1,2 @@
 # archlinux-installer
-My archlinux install scrtipts
+My archlinux install scripts
