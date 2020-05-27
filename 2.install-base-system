@@ -29,6 +29,10 @@ cat <<EOF > /etc/hosts
 127.0.1.1	testvm.localdomain	testvm
 EOF
 
+# Use the nearest mirrors
+pacman -S reflector --noconfirm
+reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
 # Install Network Manager
 pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
