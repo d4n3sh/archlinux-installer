@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Set the time zone
+ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+ls -l /etc/localtime
+
+# Set the system clock
+hwclock --systohc
+hwclock
+
+# Set locale
+sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+cat /etc/locale.gen | grep -e 's/^en_US.UTF-8 UTF-8'
+locale-gen
+
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+cat /etc/locale.conf
+
+hostname="testvm"
+cat <<EOF > /etc/hostname
+${hostname}
+EOF
+
+cat <<EOF > /etc/hosts
+# Static table lookup for hostnames.
+# See hosts(5) for details.
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	testvm.localdomain	testvm
+EOF
+
+# Install Network Manager
+pacman -S networkmanager --noconfirm
+systemctl enable NetworkManager
+
+# Install microcode
+pacman -S intel-ucode --noconfirm
+pacman -S amd-ucode --noconfirm
+
+# Generate the initramfs
+mkinitcpio -P
+
+# Setup bootloader
+pacman -S grub os-prober --noconfirm
+grub-install --target=i386-pc /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# Set root passwd
+passwd root

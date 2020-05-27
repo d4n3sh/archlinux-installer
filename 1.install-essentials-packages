@@ -62,8 +62,8 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Copy install scripts to the chroot environment
 if [[ -d /mnt/root ]]; then
-  echo "Copying "$(dirname "$0")" install scripts into the chroot environment."
-  cp -r "$(dirname "$0")" /mnt/root/
+  echo "Copying "$(pwd)" install scripts into the chroot environment."
+  cp -r "$(pwd)" /mnt/root/
 else
   echo "Failed to copy "$(dirname "$0")" install scripts into the chroot environment."
   exit 1
