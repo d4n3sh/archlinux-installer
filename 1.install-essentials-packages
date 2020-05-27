@@ -36,7 +36,7 @@ fi
 
 # Partition the disk
 wipefs -q -a /dev/sda
-parted --script -a optimal -- /dev/sda mklabel gpt mkpart primary ext4 2048s 100% set 1 boot
+parted --script -a optimal -- /dev/sda mklabel msdos mkpart primary ext4 2048s 100% set 1 boot
 parted --script -- /dev/sda print
 
 # Format the partions
@@ -44,7 +44,7 @@ mkfs.ext4 -F /dev/sda1
 
 # Use the nearest mirrors
 pacman -S reflector --noconfirm
-reflector --country "US" --latest 5 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Mount the partitions
 mount /dev/sda1 /mnt
