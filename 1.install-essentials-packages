@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+bootmode=""
+
+# Check if in UEFI mode
+if [[ -d "/sys/firmware/efi/efivars" ]]; then
+  echo "UEFI mode"
+  bootmode="UEFI"
+else
+  echo "BIOS mode"
+  bootmode="BIOS"
+fi
+
+# Check if internet is available
+exitcode=""
+ping -c3 archlinux.org 2>&1 >/dev/null
+exitcode=$?
+if [[ ${exitcode} -eq 0 ]]; then
+  echo "Internet reachable"
+else
+  echo "Cannot get to the internet"
+  exit 1
+fi
+
+# Update system time
+timedatectl set-ntp true
+
+# Check if device is already mounted
+exitcode=""
+grep -q sda /proc/mounts >/dev/null 2>&1
+exitcode=$?
+if [[ ${exitcode} -eq 0 ]]; then
+  echo "Device is already mouted, will not continue."
+  exit 1
+fi
+
+# Partition the disk
+wipefs -q -a /dev/sda
+parted --script -a optimal -- /dev/sda mklabel gpt mkpart primary ext4 2048s 100% set 1 boot
+parted --script -- /dev/sda print
+
+# Format the partions
+mkfs.ext4 -F /dev/sda1
+
+# Use the nearest mirrors
+pacman -S reflector --noconfirm
+reflector --country "US" --latest 5 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
+# Mount the partitions
+mount /dev/sda1 /mnt
+
+# Pacstrap
+pacstrap /mnt \
+linux \
+linux-headers \
+base \
+base-devel \
+linux-firmware
+
+# Setup fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# Copy install scripts to the chroot environment
+if [[ -d /mnt/root ]]; then
+  echo "Copying "$(dirname "$0")" install scripts into the chroot environment."
+  cp -r "$(dirname "$0")" /mnt/root/
+else
+  echo "Failed to copy "$(dirname "$0")" install scripts into the chroot environment."
+  exit 1
+fi
+
+# chroot
+arch-chroot /mnt
