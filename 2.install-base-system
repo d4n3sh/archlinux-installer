@@ -52,7 +52,7 @@ timeout 1
 default arch
 EOF
 
-cat <<EOF > /boot/entries/arch.conf
+cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux
 linux /vmlinuz-linux
 initrd /intel-ucode.img
