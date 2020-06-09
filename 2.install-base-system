@@ -30,7 +30,7 @@ cat <<EOF > /etc/hosts
 EOF
 
 # Use the nearest mirrors
-pacman -S reflector --noconfirm
+pacman -Sy reflector --noconfirm
 reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Install Network Manager
@@ -44,8 +44,21 @@ pacman -S intel-ucode --noconfirm
 mkinitcpio -P
 
 # Setup bootloader
+pacman -S efibootmgr --noconfirm
 bootctl install
-bootctl is-installed
+
+cat <<EOF > /boot/loader/loader.conf
+timeout 1
+default arch
+EOF
+
+cat <<EOF > /boot/entries/arch.conf
+title Arch Linux
+linux /vmlinuz-linux
+initrd /intel-ucode.img
+initrd /initramfs-linux.img
+options root="LABEL=OS" rw
+EOF
 
 # Set root passwd
 passwd root
