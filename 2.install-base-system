@@ -39,15 +39,13 @@ systemctl enable NetworkManager
 
 # Install microcode
 pacman -S intel-ucode --noconfirm
-pacman -S amd-ucode --noconfirm
 
 # Generate the initramfs
 mkinitcpio -P
 
 # Setup bootloader
-pacman -S grub os-prober --noconfirm
-grub-install --target=i386-pc /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
+bootctl install
+bootctl is-installed
 
 # Set root passwd
 passwd root

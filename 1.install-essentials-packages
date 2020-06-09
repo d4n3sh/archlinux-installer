@@ -7,8 +7,8 @@ if [[ -d "/sys/firmware/efi/efivars" ]]; then
   echo "UEFI mode"
   bootmode="UEFI"
 else
-  echo "BIOS mode"
-  bootmode="BIOS"
+  echo "Only UEFI mode supported"
+  exit 1
 fi
 
 # Check if internet is available
@@ -35,19 +35,27 @@ if [[ ${exitcode} -eq 0 ]]; then
 fi
 
 # Partition the disk
-wipefs -q -a /dev/sda
-parted --script -a optimal -- /dev/sda mklabel msdos mkpart primary ext4 2048s 100% set 1 boot
-parted --script -- /dev/sda print
+sgdisk -Z /dev/sda
+sgdisk -og /dev/sda
+first_sector=$(sgdisk -F /dev/sda)
+last_sector=$(sgdisk -E /dev/sda)
+sgdisk -n 1:${first_sector}:+512M -c 1:"EFI" -t 1:ef00 -g /dev/sda
+first_sector=$(sgdisk -F /dev/sda)
+sgdisk -n 2:${fisrt_sector}:${last_sector} -c 2:"ROOT" -t 2:8300 -g /dev/sda
+sgdisk -p /dev/sda
 
 # Format the partions
-mkfs.ext4 -F /dev/sda1
+mkfs.vfat -F32 /dev/sda1
+mkfs.xfs -f /dev/sda2
 
 # Use the nearest mirrors
 pacman -S reflector --noconfirm
 reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Mount the partitions
-mount /dev/sda1 /mnt
+mount /dev/sda2 /mnt
+mkdir -p /mnt/boot/efi
+mount /dev/sda1 /mnt/boot/efi
 
 # Pacstrap
 pacstrap /mnt \
@@ -55,7 +63,8 @@ linux \
 linux-headers \
 base \
 base-devel \
-linux-firmware
+linux-firmware \
+xfsprogs
 
 # Setup fstab
 genfstab -U /mnt >> /mnt/etc/fstab
