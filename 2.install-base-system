@@ -48,7 +48,7 @@ pacman -S efibootmgr --noconfirm
 bootctl install
 
 cat <<EOF > /boot/loader/loader.conf
-timeout 1
+timeout 0
 default arch
 EOF
 
