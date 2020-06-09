@@ -57,7 +57,7 @@ title Arch Linux
 linux /vmlinuz-linux
 initrd /intel-ucode.img
 initrd /initramfs-linux.img
-options root="LABEL=OS" rw
+options root="PARTLABEL=OS" rw
 EOF
 
 # Set root passwd
