@@ -61,4 +61,6 @@ echo "Setting up ZSH"
 chsh -s /usr/bin/zsh
 
 echo "Setting up windows manager"
-systemctl enable --now sddm
+systemctl enable sddm
+
+echo "Install complete."
