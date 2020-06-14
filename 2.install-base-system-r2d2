@@ -62,3 +62,8 @@ EOF
 
 # Set root passwd
 passwd root
+
+# Reboot
+echo "All done. Rebooting in 5 secs"
+sleep 5
+reboot
