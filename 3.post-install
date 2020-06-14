@@ -11,13 +11,14 @@ sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL).ALL/' /etc/sudoers
 
 # Install yay
 echo "Installing yay aur helper."
+pacman -Sy git
 git clone https://aur.archlinux.org/yay.git /tmp/yay
 chmod -R 777 /tmp/yay
 sudo -u danesh -- sh -c 'cd /tmp/yay && makepki -si --noconfirm'
 
 # Install xorg
 echo "Installing packages."
-yay -Sy \
+yay -S \
 xorg \
 xorg-xinit \
 xorg-xclock \
