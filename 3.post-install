@@ -8,10 +8,10 @@ passwd danesh
 sed -i 's/^#.%wheel*ALL=(ALL)*ALL$/%wheelll/' /etc/sudoers
 
 # Install yay
-git clone https://aur.archlinux.org/yay.git
-cd ./yay
-makepkg -si
-cd ..
+git clone https://aur.archlinux.org/yay.git /tmp/yay
+cd /tmp/yay
+sudo -i -u danesh makepkg -si
+cd -
 
 # Install xorg
 yay -Sy \
