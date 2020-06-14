@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
 
 # Users
+echo "Adding user."
 useradd -m -G wheel danesh
 passwd danesh
 
 # Update the sudeoers file
-sed -i 's/^#.%wheel*ALL=(ALL)*ALL$/%wheelll/' /etc/sudoers
+echo "Adding user to the sudoers file."
+sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL).ALL/' /etc/sudoers
 
 # Install yay
+echo "Installing yay aur helper."
 git clone https://aur.archlinux.org/yay.git /tmp/yay
-cd /tmp/yay
-sudo -i -u danesh makepkg -si
-cd -
+chmod -R 777 /tmp/yay
+sudo -u danesh -- sh -c 'cd /tmp/yay && makepki -si --noconfirm'
 
 # Install xorg
+echo "Installing packages."
 yay -Sy \
 xorg \
 xorg-xinit \
@@ -52,6 +55,8 @@ firefox \
 zsh
 
 # Setup zsh
+echo "Setting up ZSH"
 chsh -s /usr/bin/zsh
 
+echo "Setting up windows manager"
 systemctl enable --now sddm
