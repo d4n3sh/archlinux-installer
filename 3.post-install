@@ -7,11 +7,11 @@ passwd danesh
 
 # Update the sudeoers file
 echo "Adding user to the sudoers file."
-sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL).ALL/' /etc/sudoers
+sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 # Install yay
 echo "Installing yay aur helper."
-pacman -Sy git
+pacman -Sy git --noconfirm
 git clone https://aur.archlinux.org/yay.git /tmp/yay
 chmod -R 777 /tmp/yay
 sudo -u danesh -- sh -c 'cd /tmp/yay && makepki -si --noconfirm'
