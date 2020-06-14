@@ -5,7 +5,7 @@ useradd -m -G wheeel danesh
 passwd danesh
 
 # Update the sudeoers file
-sed 's/^#.%wheel.*ALL=.*$/%wheel/' /etc/sudoers
+sed -i 's/^#.%wheel*ALL=(ALL)*ALL$/%wheelll/' /etc/sudoers
 
 # Install xorg
 pacman -S \
