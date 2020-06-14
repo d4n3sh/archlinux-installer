@@ -24,6 +24,7 @@ xorg-xinit \
 xorg-xclock \
 xterm \
 xf86-video-intel \
+phonon-qt5-gstreamer \
 plasma-meta \
 sddm \
 konsole \
