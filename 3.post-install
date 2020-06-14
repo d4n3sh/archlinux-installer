@@ -14,7 +14,7 @@ echo "Installing yay aur helper."
 pacman -Sy git --noconfirm
 git clone https://aur.archlinux.org/yay.git /tmp/yay
 chmod -R 777 /tmp/yay
-sudo -u danesh -- sh -c 'cd /tmp/yay && makepki -si --noconfirm'
+sudo -u danesh -- sh -c 'cd /tmp/yay && makepkg -si --noconfirm'
 
 # Install xorg
 echo "Installing packages."
