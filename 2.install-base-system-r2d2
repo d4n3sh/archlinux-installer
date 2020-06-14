@@ -1,29 +1,5 @@
 #!/usr/bin/env bash
 
-# Pacstrap
-pacstrap /mnt \
-linux \
-linux-headers \
-base \
-base-devel \
-linux-firmware \
-xfsprogs \
-vim
-
-# Setup fstab
-genfstab -U /mnt >> /mnt/etc/fstab
-
-# Copy install scripts to the chroot environment
-if [[ -d /mnt/root ]]; then
-  echo "Copying "$(pwd)" install scripts into the chroot environment."
-  cp -r "$(pwd)" /mnt/root/
-else
-  echo "Failed to copy "$(dirname "$0")" install scripts into the chroot environment."
-  exit 1
-fi
-
-# chroot
-arch-chroot /mnt /root/archlinux-installer/2.install-base-system
 # Set the time zone
 ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 ls -l /etc/localtime

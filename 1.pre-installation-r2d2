@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 bootmode=""
+hostname="r2d2"
 
 # Check if in UEFI mode
 if [[ -d "/sys/firmware/efi/efivars" ]]; then
@@ -56,3 +57,28 @@ reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pa
 mount /dev/sda2 /mnt
 mkdir -p /mnt/boot
 mount /dev/sda1 /mnt/boot
+
+# Pacstrap
+pacstrap /mnt \
+linux \
+linux-headers \
+base \
+base-devel \
+linux-firmware \
+xfsprogs \
+vim
+
+# Setup fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# Copy install scripts to the chroot environment
+if [[ -d /mnt/root ]]; then
+  echo "Copying "$(pwd)" install scripts into the chroot environment."
+  cp -r "$(pwd)" /mnt/root/
+else
+  echo "Failed to copy "$(dirname "$0")" install scripts into the chroot environment."
+  exit 1
+fi
+
+# chroot
+arch-chroot /mnt /root/archlinux-installer/2.install-base-system-${hostname}
