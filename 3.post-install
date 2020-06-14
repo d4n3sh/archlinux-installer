@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Users
+useradd -m -G wheeel danesh
+passwd danesh
+
+# Update the sudeoers file
+sed 's/^#.%wheel.*ALL=.*$/%wheel/' /etc/sudoers
+
+# Install xorg
+pacman -S \
+xorg \
+xorg-xinit \
+xorg-xclock \
+xterm \
+xf86-video-intel \
+
+# Install KDE
+pacman -S \
+plasma-meta \
+kde-applications-meta \
+sddm
+systemctl enable --now sddm
