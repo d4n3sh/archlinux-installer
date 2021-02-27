@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 bootmode=""
-hostname="r2d2"
-device="/dev/sda"
+hostname="beast"
 
 # Check if in UEFI mode
 if [[ -d "/sys/firmware/efi/efivars" ]]; then
@@ -37,6 +36,7 @@ if [[ ${exitcode} -eq 0 ]]; then
 fi
 
 # Partition the disk
+device="/dev/nvme0n1"
 sgdisk -Z ${device}
 sgdisk -og ${device}
 first_sector="$(sgdisk -F ${device})"

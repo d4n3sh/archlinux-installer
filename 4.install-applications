@@ -1,4 +1,26 @@
 #!/usr/bin/env bash
 
-yay -Sy
+# Spotify key
+curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | gpg --import -
 
+paru -Sy \
+octopi \
+google-chrome-beta \
+firefox \
+visual-studio-code-bin \
+discord-canary \
+slack-desktop \
+teams \
+spotify \
+youtube-dl \
+kdenlive \
+simplescreenrecorder \
+noto-fonts-cjk \
+noto-fonts-emoji \
+ttf-meslo-nerd-font-powerlevel10k \
+fzf \
+ffmpegthumbs \
+packagekit \
+packagekit-qt5 \
+fwupd \
+rsync

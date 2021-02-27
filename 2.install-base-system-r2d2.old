@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-domain="d4n3sh.com"
-hostname="r2d2"
-ucode="intel-ucode"
-
 # Set the time zone
 ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 ls -l /etc/localtime
@@ -20,6 +16,7 @@ locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 cat /etc/locale.conf
 
+hostname="r2d2"
 cat <<EOF > /etc/hostname
 ${hostname}
 EOF
@@ -29,7 +26,7 @@ cat <<EOF > /etc/hosts
 # See hosts(5) for details.
 127.0.0.1	localhost
 ::1		localhost
-127.0.1.1	${hostname}.${domain}	${hostname}
+127.0.1.1	r2d2.localdomain	r2d2
 EOF
 
 # Use the nearest mirrors
@@ -41,10 +38,7 @@ pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
 
 # Install microcode
-pacman -S "${ucode}"  --noconfirm
-
-# Include encrypt module during boot
-sed -i '/^HOOKS=/s/)$/ encrypt)/' /etc/mkinitcpio.conf
+pacman -S intel-ucode --noconfirm
 
 # Generate the initramfs
 mkinitcpio -P
@@ -55,15 +49,15 @@ bootctl install
 
 cat <<EOF > /boot/loader/loader.conf
 timeout 0
-default archlinux
+default arch
 EOF
 
-cat <<EOF > /boot/loader/entries/archlinux.conf
+cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux
 linux /vmlinuz-linux
-initrd /${ucode}.img
+initrd /intel-ucode.img
 initrd /initramfs-linux.img
-options cryptdevice=PARTLABEL=OS:cryptroot root=/dev/mapper/cryptroot quiet rw
+options root="PARTLABEL=OS" rw
 EOF
 
 # Set root passwd

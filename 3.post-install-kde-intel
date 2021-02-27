@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Users
+echo "Adding user."
+useradd -m -G wheel danesh
+passwd danesh
+
+# Disable roo
+passwd -l root
+
+# Update the sudeoers file
+echo "Adding user to the sudoers file."
+sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
+
+# Install paru
+echo "Installing paru aur helper."
+pacman -Sy git --noconfirm
+git clone https://aur.archlinux.org/paru.git /tmp/paru
+chmod -R 777 /tmp/paru
+sudo -u danesh -- sh -c 'cd /tmp/paru && makepkg -si --noconfirm'
+
+# Install xorg
+echo "Installing packages."
+paru -S \
+xorg \
+xorg-xinit \
+xorg-xclock \
+xterm \
+zsh \
+plasma-meta \
+plasma-wayland-session \
+kde-applications-meta \
+sddm \
+octopi \
+xdg-utils \
+xdg-user-dirs \
+
+# Setup zsh
+echo "Setting up ZSH"
+chsh -s /usr/bin/zsh
+
+echo "Setting up windows manager"
+systemctl enable sddm
+
+echo "Install complete."

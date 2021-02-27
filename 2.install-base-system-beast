@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 domain="d4n3sh.com"
-hostname="r2d2"
-ucode="intel-ucode"
 
 # Set the time zone
 ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
@@ -20,6 +18,7 @@ locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 cat /etc/locale.conf
 
+hostname="beast"
 cat <<EOF > /etc/hostname
 ${hostname}
 EOF
@@ -41,7 +40,7 @@ pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
 
 # Install microcode
-pacman -S "${ucode}"  --noconfirm
+pacman -S amd-ucode --noconfirm
 
 # Include encrypt module during boot
 sed -i '/^HOOKS=/s/)$/ encrypt)/' /etc/mkinitcpio.conf
@@ -61,7 +60,7 @@ EOF
 cat <<EOF > /boot/loader/entries/archlinux.conf
 title Arch Linux
 linux /vmlinuz-linux
-initrd /${ucode}.img
+initrd /amd-ucode.img
 initrd /initramfs-linux.img
 options cryptdevice=PARTLABEL=OS:cryptroot root=/dev/mapper/cryptroot quiet rw
 EOF
