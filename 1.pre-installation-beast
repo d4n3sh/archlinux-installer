@@ -2,6 +2,7 @@
 
 bootmode=""
 hostname="beast"
+device="/dev/nvme0n1"
 
 # Check if in UEFI mode
 if [[ -d "/sys/firmware/efi/efivars" ]]; then
@@ -36,7 +37,6 @@ if [[ ${exitcode} -eq 0 ]]; then
 fi
 
 # Partition the disk
-device="/dev/nvme0n1"
 sgdisk -Z ${device}
 sgdisk -og ${device}
 first_sector="$(sgdisk -F ${device})"
@@ -55,7 +55,7 @@ cryptpart="/dev/mapper/cryptroot"
 
 # Format the partions
 mkfs.vfat -F32 ${part1}
-mkfs.xfs -f ${cryptpart}
+mkfs.btrfs -L OS ${cryptpart}
 
 # Use the nearest mirrors
 pacman -Sy reflector --noconfirm

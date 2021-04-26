@@ -27,6 +27,9 @@ xorg-xinit \
 xorg-xclock \
 xterm \
 zsh \
+nvidia \
+nvidia-utils \
+nvidia-settings \
 plasma-meta \
 plasma-wayland-session \
 kde-applications-meta \

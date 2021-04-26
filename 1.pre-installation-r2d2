@@ -55,7 +55,7 @@ cryptpart="/dev/mapper/cryptroot"
 
 # Format the partions
 mkfs.vfat -F32 ${part1}
-mkfs.xfs -f ${cryptpart}
+mkfs.btrfs -L OS ${cryptpart}
 
 # Use the nearest mirrors
 pacman -Sy reflector --noconfirm
@@ -73,7 +73,7 @@ linux-headers \
 base \
 base-devel \
 linux-firmware \
-xfsprogs \
+btrfs-progs \
 vim
 
 # Setup fstab

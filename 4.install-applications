@@ -8,7 +8,7 @@ octopi \
 google-chrome-beta \
 firefox \
 visual-studio-code-bin \
-discord-canary \
+discord \
 slack-desktop \
 teams \
 spotify \
@@ -23,4 +23,5 @@ ffmpegthumbs \
 packagekit \
 packagekit-qt5 \
 fwupd \
-rsync
+rsync \
+lagyzit
