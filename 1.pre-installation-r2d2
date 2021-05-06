@@ -60,17 +60,25 @@ cryptsetup open /dev/disk/by-label/OSCRYPT OSCRYPT
 mkfs.vfat -F32 /dev/disk/by-partlabel/EFI
 mkfs.btrfs -L OS /dev/mapper/OSCRYPT
 
-exit
-
 # Use the nearest mirrors
 pacman -Sy reflector --noconfirm
 reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
-# Mount the partitions
-mount ${cryptpart} /mnt
-mkdir -p /mnt/boot
-mount ${part1} /mnt/boot
+o=defaults,x-mount.mkdir
+o_btrfs=$o,compress=lzo,ssd,noatime
 
+# Mount the partitions
+mount -t btrfs LABEL=OS /mnt
+btrfs subvolume create /mnt/root
+btrfs subvolume create /mnt/home
+btrfs subvolume create /mnt/snapshots
+umount -Rv /mnt
+
+# mount ${cryptpart} /mnt
+# mkdir -p /mnt/boot
+# mount ${part1} /mnt/boot
+
+exit
 # Pacstrap
 pacstrap /mnt \
 linux \
