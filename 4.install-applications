@@ -24,4 +24,4 @@ packagekit \
 packagekit-qt5 \
 fwupd \
 rsync \
-lagyzit
+lazygit
