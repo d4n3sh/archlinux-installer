@@ -105,6 +105,6 @@ fi
 arch-chroot /mnt /root/archlinux-installer/2.install-base-system-${hostname}
 
 # Reboot
-echo "All done. Rebooting in 5 secs."
-#sleep 5
-#reboot
+echo "All done. Rebooting in 10 secs."
+sleep 10
+reboot
