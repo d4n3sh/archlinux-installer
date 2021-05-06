@@ -74,6 +74,10 @@ btrfs subvolume create /mnt/home
 btrfs subvolume create /mnt/snapshots
 umount -Rv /mnt
 
+mount -t btrfs -o subvol=root,$o_btrfs LABEL=OS /mnt
+mount -t btrfs -o subvol=home,$o_btrfs LABEL=OS /mnt/home
+mount -t btrfs -o subvol=snapshots,$o_btrfs LABEL=OS /mnt/snapshots
+
 # mount ${cryptpart} /mnt
 # mkdir -p /mnt/boot
 # mount ${part1} /mnt/boot
