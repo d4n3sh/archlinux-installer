@@ -65,7 +65,7 @@ pacman -Sy reflector --noconfirm
 reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 o=defaults,x-mount.mkdir
-o_btrfs=$o,compress=lzo,ssd,noatime
+o_btrfs=$o,compress=zstd:1,ssd
 
 # Mount the partitions
 mount -t btrfs LABEL=OS /mnt
@@ -78,11 +78,6 @@ mount -t btrfs -o subvol=root,$o_btrfs LABEL=OS /mnt
 mount -t btrfs -o subvol=home,$o_btrfs LABEL=OS /mnt/home
 mount -t btrfs -o subvol=snapshots,$o_btrfs LABEL=OS /mnt/snapshots
 
-# mount ${cryptpart} /mnt
-# mkdir -p /mnt/boot
-# mount ${part1} /mnt/boot
-
-exit
 # Pacstrap
 pacstrap /mnt \
 linux \
@@ -94,7 +89,7 @@ btrfs-progs \
 vim
 
 # Setup fstab
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -L -p /mnt >> /mnt/etc/fstab
 
 # Copy install scripts to the chroot environment
 if [[ -d /mnt/root ]]; then
@@ -110,5 +105,5 @@ arch-chroot /mnt /root/archlinux-installer/2.install-base-system-${hostname}
 
 # Reboot
 echo "All done. Rebooting in 5 secs."
-sleep 5
-reboot
+#sleep 5
+#reboot
