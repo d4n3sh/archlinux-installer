@@ -20,7 +20,10 @@ plasma-wayland-session \
 kde-applications-meta \
 sddm \
 xdg-utils \
-xdg-user-dirs
+xdg-user-dirs \
+noto-fonts \
+phonon-qt5-gstreamer \
+cronie
 
 # Setup zsh
 echo "Setting up ZSH"
