@@ -77,6 +77,7 @@ umount -Rv /mnt
 mount -v -t btrfs -o subvol=root,$o_btrfs LABEL=OS /mnt
 mount -v -t btrfs -o subvol=home,$o_btrfs LABEL=OS /mnt/home
 mount -v -t btrfs -o subvol=snapshots,$o_btrfs LABEL=OS /mnt/snapshots
+mkdir /mnt/boot
 mount -v /dev/disk/by-partlabel/EFI /mnt/boot
 
 # Pacstrap
