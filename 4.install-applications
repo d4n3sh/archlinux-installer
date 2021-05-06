@@ -24,4 +24,9 @@ packagekit \
 packagekit-qt5 \
 fwupd \
 rsync \
-lazygit
+lazygit \
+ffmpeg-compat-57 \
+zenity \
+geoclue \
+gst-libav \
+ansible
