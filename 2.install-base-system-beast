@@ -81,4 +81,4 @@ sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 # Disable root
 echo "Disabling the root account"
-passwd -l roo
+passwd -l root
