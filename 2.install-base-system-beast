@@ -66,5 +66,15 @@ initrd /initramfs-linux.img
 options cryptdevice=PARTLABEL=OSPART:OSCRYPTVOL root=LABEL=OS rootflags=subvol=rootvol quiet rw
 EOF
 
-# Set root passwd
-passwd root
+# Add users
+echo "Adding users"
+useradd -m -G wheel danesh
+passwd danesh
+
+# Update the sudeoers file
+echo "Enabling sudo for users"
+sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
+
+# Disable root
+echo "Disabling the root account"
+passwd -l roo
