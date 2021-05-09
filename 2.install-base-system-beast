@@ -63,7 +63,7 @@ title Arch Linux
 linux /vmlinuz-linux
 initrd /${ucode}.img
 initrd /initramfs-linux.img
-options cryptdevice=PARTLABEL=OS:cryptroot root=/dev/mapper/cryptroot quiet rw
+options cryptdevice=PARTLABEL=OSPART:OSCRYPTVOL root=LABEL=OS rootflags=subvol=rootvol quiet rw
 EOF
 
 # Set root passwd

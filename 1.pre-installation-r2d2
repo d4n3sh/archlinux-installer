@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-bootmode=""
 hostname="r2d2"
 device="/dev/sda"
 
 # Check if in UEFI mode
 if [[ -d "/sys/firmware/efi/efivars" ]]; then
   echo "UEFI mode"
-  bootmode="UEFI"
 else
   echo "Only UEFI mode supported"
   exit 1
@@ -15,7 +13,7 @@ fi
 
 # Check if internet is available
 exitcode=""
-ping -c3 archlinux.org 2>&1 >/dev/null
+ping -c3 archlinux.org >/dev/null 2>&1
 exitcode=$?
 if [[ ${exitcode} -eq 0 ]]; then
   echo "Internet reachable"
@@ -49,9 +47,6 @@ sgdisk --new=1:0:+1024MiB --typecode=1:ef00 --change-name=1:"EFI" \
 
 # Print partition details
 sgdisk -p ${device}
-
-part1="$(lsblk -l ${device} -o PATH,TYPE -n | grep part | awk '{print $1}' | head -n1)"
-part2="$(lsblk -l ${device} -o PATH,TYPE -n | grep part | awk '{print $1}' | tail -n1)"
 
 cryptsetup -y -v --batch-mode luksFormat /dev/disk/by-partlabel/OS --label OSCRYPT
 cryptsetup open /dev/disk/by-label/OSCRYPT OSCRYPT
@@ -94,10 +89,10 @@ genfstab -L -p /mnt >> /mnt/etc/fstab
 
 # Copy install scripts to the chroot environment
 if [[ -d /mnt/root ]]; then
-  echo "Copying "$(pwd)" install scripts into the chroot environment."
+  echo "Copying $(pwd) install scripts into the chroot environment."
   cp -r "$(pwd)" /mnt/root/
 else
-  echo "Failed to copy "$(dirname "$0")" install scripts into the chroot environment."
+  echo "Failed to copy $(dirname "$0") install scripts into the chroot environment."
   exit 1
 fi
 
