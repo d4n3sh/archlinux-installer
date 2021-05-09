@@ -82,3 +82,6 @@ sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
 # Disable root
 echo "Disabling the root account"
 passwd -l root
+
+# Move the install dir into ~danesh
+mv /root/archlinux-installer /home/danesh/

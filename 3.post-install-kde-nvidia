@@ -2,10 +2,10 @@
 
 # Install aur helper
 echo "Installing paru aur helper."
-pacman -Sy git --noconfirm
+sudo pacman -Sy git --noconfirm
 git clone https://aur.archlinux.org/paru.git /tmp/paru
 chmod -R 777 /tmp/paru
-sudo -u danesh -- sh -c 'cd /tmp/paru && makepkg -si --noconfirm'
+cd /tmp/paru && makepkg -si --noconfirm
 
 # Install xorg
 echo "Installing packages."
@@ -27,9 +27,9 @@ xdg-user-dirs \
 
 # Setup zsh
 echo "Setting up ZSH"
-chsh -s /usr/bin/zsh
+sudo chsh -s /usr/bin/zsh
 
 echo "Setting up windows manager"
-systemctl enable sddm
+sudo systemctl enable sddm
 
 echo "Install complete."
