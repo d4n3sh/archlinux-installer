@@ -40,6 +40,10 @@ reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pa
 pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
 
+# Enable trim
+pacman -S util-linux --noconfirm
+systemctl enable fstrim.timer
+
 # Install microcode
 pacman -S "${ucode}" --noconfirm
 
