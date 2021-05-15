@@ -1,23 +1,11 @@
 #!/usr/bin/env bash
 
-# Users
-echo "Adding user."
-useradd -m -G wheel danesh
-passwd danesh
-
-# Disable root
-passwd -l root
-
-# Update the sudeoers file
-echo "Adding user to the sudoers file."
-sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
-
-# Install paru
+# Install aur helper
 echo "Installing paru aur helper."
-pacman -Sy git --noconfirm
+sudo pacman -Sy git --noconfirm
 git clone https://aur.archlinux.org/paru.git /tmp/paru
 chmod -R 777 /tmp/paru
-sudo -u danesh -- sh -c 'cd /tmp/paru && makepkg -si --noconfirm'
+cd /tmp/paru && makepkg -si --noconfirm
 
 # Install xorg
 echo "Installing packages."
@@ -39,9 +27,9 @@ xdg-user-dirs \
 
 # Setup zsh
 echo "Setting up ZSH"
-chsh -s /usr/bin/zsh
+sudo chsh -s /usr/bin/zsh
 
 echo "Setting up windows manager"
-systemctl enable sddm
+sudo systemctl enable sddm
 
 echo "Install complete."

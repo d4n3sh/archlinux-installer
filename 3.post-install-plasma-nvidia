@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 
-# Users
-echo "Adding user."
-useradd -m -G wheel danesh
-passwd danesh
-
-# Update the sudeoers file
-echo "Adding user to the sudoers file."
-sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
-
-# Install yay
+# Install aur helper
 echo "Installing paru aur helper."
 pacman -Sy git --noconfirm
 git clone https://aur.archlinux.org/paru.git /tmp/paru

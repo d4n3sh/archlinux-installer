@@ -40,6 +40,10 @@ reflector --country "US" --latest 15 --protocol https --sort rate --save /etc/pa
 pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
 
+# Enable trim
+pacman -S util-linux --noconfirm
+systemctl enable fstrim.timer
+
 # Install microcode
 pacman -S "${ucode}" --noconfirm
 
@@ -63,8 +67,21 @@ title Arch Linux
 linux /vmlinuz-linux
 initrd /${ucode}.img
 initrd /initramfs-linux.img
-options cryptdevice=PARTLABEL=OS:cryptroot root=/dev/mapper/cryptroot quiet rw
+options cryptdevice=PARTLABEL=OS:OSCRYPT root=LABEL=OS rootflags=subvol=root quiet rw
 EOF
 
-# Set root passwd
-passwd root
+# Add users
+echo "Adding users"
+useradd -m -G wheel danesh
+passwd danesh
+
+# Update the sudeoers file
+echo "Enabling sudo for users"
+sed -i 's/^#.%wheel.ALL=(ALL).ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
+
+# Disable root
+echo "Disabling the root account"
+passwd -l root
+
+# Move the install dir into ~danesh
+mv /root/archlinux-installer /home/danesh/
